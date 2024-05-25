@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,22 +6,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebCode</title>
-    <script src="https://jstatic.pages.dev/files/products/ide/docs/loader.js"></script>
     <link rel="icon" type="image/png" href="https://cdn360.pages.dev/products/WebCode/icon.png" sizes="30x30">
     <link rel="icon" type="image/png" href="https://cdn360.pages.dev/products/WebCode/icon.png" sizes="600x600">
+    <script src="https://jstatic.pages.dev/files/products/ide/docs/loader.js"></script>
     <style>
         @font-face {
-            font-family: WebCodeSans;
-            src: url(https://cdn360.pages.dev/products/WebCode/WebCodeSans.ttf);
+            font-family: Roadway;
+            src: url(https://delivercdn.pages.dev/fonts/roadway/roadway.ttf);
         }
+
         @font-face {
-            font-family: WebCode;
-            src: url(https://cdn360.pages.dev/products/WebCode/WebCode.ttf);
+            font-family: Roadway Mono;
+            src: url(https://delivercdn.pages.dev/fonts/roadway/roadwaymono.ttf);
         }
+
         @font-face {
             font-family: TwemojiRubisco;
             src: url(https://jstatic.pages.dev/files/products/ide/fonts/TwemojiRubisco.ttf);
         }
+
         html, body {
             margin: 0;
             padding: 0;
@@ -32,6 +34,7 @@
             flex-direction: column;
             font-family: 'WebCodeSans', 'TwemojiRubisco', Arial, Helvetica, sans-serif;
         }
+
         #logo {
             position: absolute;
             top: 0;
@@ -40,31 +43,42 @@
             height: 100px;
             z-index: 1;
         }
+
         #editor-container {
             flex: 1;
             display: flex;
-            flex-direction: row;
             height: 100%;
         }
+
         #editor {
             width: 50%;
-            font-family: 'WebCodeSans', 'TwemojiRubisco', Arial, Helvetica, sans-serif;
+            font-family: 'Roadway', 'TwemojiRubisco', Arial, Helvetica, sans-serif;
+            overflow: none;
         }
+
+        #divider {
+            width: 3px;
+            cursor: ew-resize;
+            background-color: #000;
+        }
+
         #preview {
-            width: 50%;
+            flex: 1;
             overflow: auto;
-            padding: 20px;
             background-color: #ffffff;
             border-left: 1px solid #000;
         }
+
+
         .button-container {
             display: flex;
             justify-content: flex-end;
             padding: 8px;
             background-color: #000000;
         }
+
         button {
-            font-family: 'WebCodeSans', 'TwemojiRubisco', Arial, Helvetica, sans-serif;
+            font-family: 'Roadway', 'TwemojiRubisco', Arial, Helvetica, sans-serif;
             margin-right: 8px;
             padding: 6px 12px;
             font-size: 14px;
@@ -74,19 +88,18 @@
             border: none;
             border-radius: 4px;
         }
+
         button:hover {
             background-color: #3474f0;
             color: #ffffff;
         }
-        .monaco-editor .suggest-widget .monaco-list .monaco-list-row .monaco-highlighted-label {
+
+        .monaco-editor, .suggest-widget, .monaco-list, .monaco-list-row, .monaco-highlighted-label {
             color: #ffffff !important;
         }
-        iframe {
-            width: 100%;
-            height: 100%;
-        }
+        
         select {
-            font-family: 'WebCodeSans', 'TwemojiRubisco', Arial, Helvetica, sans-serif;
+            font-family: 'Roadway', 'TwemojiRubisco', Arial, Helvetica, sans-serif;
             font-size: 14px;
             background-color: #212121;
             color: #ffffff;
@@ -95,6 +108,7 @@
             padding: 6px 12px;
             border-radius: 4px;
         }
+
         #logo {
             position: absolute;
             top: 0;
@@ -105,10 +119,62 @@
             margin-left: 10px;
             padding-top: 8px;
         }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        iframe::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        iframe::-webkit-scrollbar-track {
+            background: #10151d;
+        }
+
+        iframe::-webkit-scrollbar-thumb {
+            background-color: #bfc7d2;
+            border-radius: 10px;
+            border: 3px solid #10151d;
+        }
+
+        iframe::-webkit-scrollbar-thumb:hover {
+            background-color: #888d94;
+        }
+
+        iframe::-webkit-scrollbar-thumb:active {
+            background-color: #888d94;
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #10151d;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #bfc7d2;
+            border-radius: 10px;
+            border: 3px solid #10151d;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #888d94;
+        }
+
+        ::-webkit-scrollbar-thumb:active {
+            background-color: #888d94;
+        }
     </style>
 </head>
+
 <body>
     <img id="logo" src="https://cdn360.pages.dev/products/WebCode/wordmark.png" alt="Logo">
+
     <div class="button-container">
         <button id="openButton">📂 Open</button>
         <button id="saveButton">💾 Save</button>
@@ -121,20 +187,31 @@
             <option value="off">Mini Map: Disabled</option>
         </select>
     </div>
+
     <div id="editor-container">
         <div id="editor"></div>
-        <iframe id="preview" style="flex: 1; border: none;"></iframe>
+        <div id="divider"></div>
+        <iframe id="preview"></iframe>
     </div>
+
     <script>
         require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.27.0/min/vs' }});
         require(['vs/editor/editor.main'], function () {
             var editor = monaco.editor.create(document.getElementById('editor'), {
-                value: `<!--This is where your HTML, JavaScript, and CSS code goes.-->`,
+                value: `<!DOCTYPE html>
+<html>
+
+<body>
+    <h1>My First Heading</h1>
+    <p>My first paragraph.</p>
+</body>
+
+</html>`,
                 language: 'html',
                 theme: 'vs-dark',
                 automaticLayout: true,
                 fontSize: 18,
-                fontFamily: 'WebCodeSans, TwemojiRubisco, Arial, Helvetica, sans-serif',
+                fontFamily: 'monospace, TwemojiRubisco, Arial, Helvetica, sans-serif',
                 scrollBeyondLastLine: true,
                 minimap: { enabled: true },
                 lineNumbers: "on",
@@ -157,6 +234,7 @@
                 };
                 input.click();
             }
+
             function saveFile() {
                 var content = editor.getValue();
                 var blob = new Blob([content], { type: 'text/html' });
@@ -173,9 +251,12 @@
                 document.body.removeChild(a);
                 isModified = false;
             }
+
             document.getElementById('openButton').addEventListener('click', openFile);
             document.getElementById('saveButton').addEventListener('click', saveFile);
+
             var isModified = false;
+
             editor.onDidChangeModelContent(function() {
                 isModified = true;
                 var fileName = document.title;
@@ -185,10 +266,12 @@
                 document.title = fileName;
                 updatePreview();
             });
+
             function updatePreview() {
                 var preview = document.getElementById('preview');
                 preview.srcdoc = editor.getValue();
             }
+
             window.addEventListener('beforeunload', function(e) {
                 if (isModified) {
                     var confirmationMessage = 'You have unsaved changes. Are you sure you want to leave?';
@@ -196,10 +279,12 @@
                     return confirmationMessage;
                 }
             });
+
             document.getElementById('lineWrapSelect').addEventListener('change', function() {
                 var value = this.value;
                 editor.updateOptions({ wordWrap: value });
             });
+
             document.getElementById('minimapSelect').addEventListener('change', function() {
                 var value = this.value;
                 editor.updateOptions({ minimap: { enabled: value === 'on' } });
@@ -212,9 +297,46 @@
                 } else if (event.ctrlKey && event.key === 'o') {
                     event.preventDefault();
                     openFile();
+                } else if (event.altKey && event.key === 'm') {
+                    event.preventDefault();
+                    var minimapEnabled = editor.getOption(monaco.editor.EditorOption.minimap).enabled;
+                    editor.updateOptions({ minimap: { enabled: !minimapEnabled } });
+                    document.getElementById('minimapSelect').value = minimapEnabled ? 'off' : 'on';
+                } else if (event.altKey && event.key === 'z') {
+                    event.preventDefault();
+                    var wordWrapEnabled = editor.getOption(monaco.editor.EditorOption.wordWrap) === 'on';
+                    editor.updateOptions({ wordWrap: wordWrapEnabled ? 'off' : 'on' });
+                    document.getElementById('lineWrapSelect').value = wordWrapEnabled ? 'off' : 'on';
+                }
+            });
+
+            var divider = document.getElementById('divider');
+            var editorContainer = document.getElementById('editor-container');
+            var editorElement = document.getElementById('editor');
+            var isResizing = false;
+
+            divider.addEventListener('mousedown', function(e) {
+                isResizing = true;
+                document.body.style.cursor = 'ew-resize';
+            });
+
+            document.addEventListener('mousemove', function(e) {
+                if (isResizing) {
+                    var offsetRight = editorContainer.clientWidth - (e.clientX - editorContainer.offsetLeft);
+                    var editorWidth = editorContainer.clientWidth - offsetRight;
+                    editorWidth = Math.max(editorWidth, 100); // Minimum width for the editor
+                    editorElement.style.width = editorWidth + 'px';
+                }
+            });
+
+            document.addEventListener('mouseup', function() {
+                if (isResizing) {
+                    isResizing = false;
+                    document.body.style.cursor = 'default';
                 }
             });
         });
+        updatePreview();
     </script>
 </body>
 </html>
