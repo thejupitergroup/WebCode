@@ -5,31 +5,23 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>WebCode</title>
-
     <link rel="icon" type="image/png" href="https://cdn360.pages.dev/products/WebCode/icon.png" sizes="30x30">
     <link rel="icon" type="image/png" href="https://cdn360.pages.dev/products/WebCode/icon.png" sizes="600x600">
-
     <script src="https://jstatic.pages.dev/files/products/ide/docs/loader.js"></script>
     <style>
         @font-face {
-            font-family: 'Roadway';
+            font-family: Roadway;
             src: url(https://delivercdn.pages.dev/fonts/roadway/roadway.ttf);
         }
 
         @font-face {
-            font-family: 'Roadway Mono';
+            font-family: Roadway Mono;
             src: url(https://delivercdn.pages.dev/fonts/roadway/roadwaymono.ttf);
         }
 
         @font-face {
-            font-family: 'Priffordd Mono';
-            src: url(https://delivercdn.pages.dev/fonts/PrifforddMono.ttf);
-        }
-
-        @font-face {
-            font-family: 'TwemojiRubisco';
+            font-family: TwemojiRubisco;
             src: url(https://jstatic.pages.dev/files/products/ide/fonts/TwemojiRubisco.ttf);
         }
 
@@ -40,7 +32,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            font-family: 'Roadway', 'TwemojiRubisco', Arial, Helvetica, sans-serif;
+            font-family: 'WebCodeSans', 'TwemojiRubisco', Arial, Helvetica, sans-serif;
         }
 
         #logo {
@@ -217,9 +209,9 @@
 </html>`,
                 language: 'html',
                 theme: 'vs-dark',
+                automaticLayout: true,
                 fontSize: 18,
-                fontWeight: "normal",
-                fontFamily: 'Priffordd Mono, TwemojiRubisco, Arial, Helvetica, sans-serif',
+                fontFamily: 'monospace, TwemojiRubisco, Arial, Helvetica, sans-serif',
                 scrollBeyondLastLine: true,
                 minimap: { enabled: true },
                 lineNumbers: "on",
