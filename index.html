@@ -1,13 +1,15 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>WebCode</title>
+
     <link rel="icon" type="image/png" href="https://cdn360.pages.dev/products/WebCode/icon.png" sizes="30x30">
     <link rel="icon" type="image/png" href="https://cdn360.pages.dev/products/WebCode/icon.png" sizes="600x600">
+
     <script src="https://jstatic.pages.dev/files/products/ide/docs/loader.js"></script>
     <style>
         @font-face {
@@ -23,6 +25,11 @@
         @font-face {
             font-family: 'TwemojiRubisco';
             src: url(https://jstatic.pages.dev/files/products/ide/fonts/TwemojiRubisco.ttf);
+        }
+
+        @font-face {
+            font-family: 'CodeStorm Mono';
+            src: url(https://delivercdn.pages.dev/fonts/CodeStormMono.ttf);
         }
 
         html, body {
@@ -211,12 +218,14 @@
                 theme: 'vs-dark',
                 automaticLayout: true,
                 fontSize: 18,
-                fontFamily: 'Roadway Mono, TwemojiRubisco, Arial, Helvetica, sans-serif',
+                fontFamily: 'CodeStorm Mono, TwemojiRubisco, Arial, Helvetica, sans-serif',
                 scrollBeyondLastLine: true,
                 minimap: { enabled: true },
                 lineNumbers: "on",
                 wordWrap: "off"
             });
+
+
 
             function openFile() {
                 var input = document.createElement('input');
@@ -251,6 +260,9 @@
                 document.body.removeChild(a);
                 isModified = false;
             }
+
+            editor.remeasureFonts();
+            monaco.editor.remeasureFonts();
 
             document.getElementById('openButton').addEventListener('click', openFile);
             document.getElementById('saveButton').addEventListener('click', saveFile);
