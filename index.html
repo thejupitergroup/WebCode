@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +14,6 @@
 
     <script src="https://jstatic.pages.dev/files/products/ide/docs/loader.js"></script>
     <style>
-
         /* Default UI fonts */
         @font-face {
             font-family: 'Roadway';
@@ -24,7 +25,7 @@
             src: url(https://delivercdn.pages.dev/fonts/roadway/roadwaymono.ttf);
         }
 
-        /* CodeStorm UI fonts */ 
+        /* CodeStorm UI fonts */
         @font-face {
             font-family: 'WebBrains Mono';
             src: url(https://delivercdn.pages.dev/fonts/WebBrainsMono-Regular.ttf);
@@ -84,6 +85,7 @@
             border-left: 1px solid #000;
         }
 
+
         .button-container {
             display: flex;
             justify-content: flex-end;
@@ -139,6 +141,50 @@
             height: 100%;
             border: none;
         }
+
+        iframe::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        iframe::-webkit-scrollbar-track {
+            background: #10151d;
+        }
+
+        iframe::-webkit-scrollbar-thumb {
+            background-color: #bfc7d2;
+            border-radius: 10px;
+            border: 3px solid #10151d;
+        }
+
+        iframe::-webkit-scrollbar-thumb:hover {
+            background-color: #888d94;
+        }
+
+        iframe::-webkit-scrollbar-thumb:active {
+            background-color: #888d94;
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #10151d;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #bfc7d2;
+            border-radius: 10px;
+            border: 3px solid #10151d;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #888d94;
+        }
+
+        ::-webkit-scrollbar-thumb:active {
+            background-color: #888d94;
+        }
     </style>
 </head>
 
@@ -168,19 +214,17 @@
         require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.27.0/min/vs' }});
         require(['vs/editor/editor.main'], function () {
             var editor = monaco.editor.create(document.getElementById('editor'), {
-                value: `<!--This is where you can add your HTML, CSS, and JS code!-->`,
+                value: ``,
                 language: 'html',
                 theme: 'vs-dark',
                 automaticLayout: true,
-                fontSize: 16,
+                fontSize: 18,
                 fontFamily: 'WebBrains Mono, TwemojiRubisco, Arial, Helvetica, sans-serif',
                 scrollBeyondLastLine: true,
                 minimap: { enabled: true },
                 lineNumbers: "on",
                 wordWrap: "off"
             });
-
-
 
             function openFile() {
                 var input = document.createElement('input');
@@ -215,9 +259,6 @@
                 document.body.removeChild(a);
                 isModified = false;
             }
-
-            editor.remeasureFonts();
-            monaco.editor.remeasureFonts();
 
             document.getElementById('openButton').addEventListener('click', openFile);
             document.getElementById('saveButton').addEventListener('click', saveFile);
