@@ -7,12 +7,14 @@
 
     <title>WebCode</title>
 
+    <link rel="icon" type="image/png" href="https://cdn360.pages.dev/products/WebCode/icon.png" sizes="15x15">
     <link rel="icon" type="image/png" href="https://cdn360.pages.dev/products/WebCode/icon.png" sizes="30x30">
     <link rel="icon" type="image/png" href="https://cdn360.pages.dev/products/WebCode/icon.png" sizes="600x600">
-
-    <script src="https://jstatic.pages.dev/files/products/ide/docs/loader.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ext-language_tools.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ext-settings_menu.js"></script>
     <style>
-        /* Default UI fonts */
         @font-face {
             font-family: 'Roadway';
             src: url(https://delivercdn.pages.dev/fonts/roadway/roadway.ttf);
@@ -21,22 +23,6 @@
         @font-face {
             font-family: 'Roadway Mono';
             src: url(https://delivercdn.pages.dev/fonts/roadway/roadwaymono.ttf);
-        }
-
-        /* CodeStorm UI fonts */
-        @font-face {
-            font-family: 'WebBrains Mono';
-            src: url(https://delivercdn.pages.dev/fonts/WebBrainsMono-Regular.ttf);
-        }
-
-        @font-face {
-            font-family: 'Ununtu Mono';
-            src: url(https://delivercdn.pages.dev/fonts/UnuntuMono.ttf);
-        }
-
-        @font-face {
-            font-family: 'WebBrains UI';
-            src: url(https://delivercdn.pages.dev/fonts/WebBrainsUI.ttf);
         }
 
         @font-face {
@@ -51,7 +37,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            font-family: 'Roadway', 'TwemojiRubisco', Arial, Helvetica, sans-serif;
+            font-family: 'Roadway', 'TwemojiRubisco', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         }
 
         #logo {
@@ -71,7 +57,7 @@
 
         #editor {
             width: 50%;
-            font-family: 'Roadway', 'TwemojiRubisco', Arial, Helvetica, sans-serif;
+            font-family: 'Roadway', 'TwemojiRubisco', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             overflow: none;
         }
 
@@ -88,7 +74,6 @@
             border-left: 1px solid #000;
         }
 
-
         .button-container {
             display: flex;
             justify-content: flex-end;
@@ -97,7 +82,7 @@
         }
 
         button {
-            font-family: 'WebBrains UI', 'TwemojiRubisco', Arial, Helvetica, sans-serif;
+            font-family: 'Roadway', 'TwemojiRubisco', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             margin-right: 8px;
             padding: 6px 12px;
             font-size: 14px;
@@ -113,12 +98,8 @@
             color: #ffffff;
         }
 
-        .monaco-editor, .suggest-widget, .monaco-list, .monaco-list-row, .monaco-highlighted-label {
-            color: #ffffff !important;
-        }
-        
         select {
-            font-family: 'WebBrains UI', 'TwemojiRubisco', Arial, Helvetica, sans-serif;
+            font-family: 'Roadway', 'TwemojiRubisco', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             font-size: 14px;
             background-color: #212121;
             color: #ffffff;
@@ -144,6 +125,28 @@
             height: 100%;
             border: none;
         }
+        
+        ::-webkit-scrollbar {
+            background: #272822;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #272822;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #8f908a;
+            border-radius: 10px;
+            border: 3px solid #272822;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #f8f8f0;
+        }
+
+        ::-webkit-scrollbar-thumb:active {
+            background-color: #f8f8f0;
+        }
     </style>
 </head>
 
@@ -154,12 +157,8 @@
         <button id="openButton">📂 Open</button>
         <button id="saveButton">💾 Save</button>
         <select id="lineWrapSelect">
-            <option value="off">Line Wrap: Disabled</option>
-            <option value="on">Line Wrap: Enabled</option>
-        </select>
-        <select id="minimapSelect">
-            <option value="on">Mini Map: Enabled</option>
-            <option value="off">Mini Map: Disabled</option>
+            <option value="off">Line Wrap: Off</option>
+            <option value="on">Line Wrap: On</option>
         </select>
     </div>
 
@@ -170,139 +169,123 @@
     </div>
 
     <script>
-        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.27.0/min/vs' }});
-        require(['vs/editor/editor.main'], function () {
-            var editor = monaco.editor.create(document.getElementById('editor'), {
-                value: `<!-- This is where your HTML, CSS, and JS code goes. -->`,
-                language: 'html',
-                theme: 'vs-dark',
-                automaticLayout: true,
-                fontSize: 18,
-                fontFamily: 'Ununtu Mono, TwemojiRubisco, Arial, Helvetica, sans-serif',
-                scrollBeyondLastLine: true,
-                minimap: { enabled: true },
-                lineNumbers: "on",
-                wordWrap: "off"
-            });
-
-            function openFile() {
-                var input = document.createElement('input');
-                input.type = 'file';
-                input.accept = 'text/html';
-                input.onchange = function(event) {
-                    var file = event.target.files[0];
-                    var reader = new FileReader();
-                    reader.onload = function() {
-                        editor.setValue(reader.result);
-                        document.title = file.name;
-                        updatePreview();
-                    };
-                    reader.readAsText(file);
-                };
-                input.click();
-            }
-
-            function saveFile() {
-                var content = editor.getValue();
-                var blob = new Blob([content], { type: 'text/html' });
-                var url = URL.createObjectURL(blob);
-                var a = document.createElement('a');
-                a.href = url;
-                var currentDate = new Date().toISOString().slice(0, 19).replace(/[-T:/]/g, '');
-                var fileName = 'html_' + currentDate + '.html';
-                a.download = fileName;
-                document.title = fileName;
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-                document.body.removeChild(a);
-                isModified = false;
-            }
-
-            document.getElementById('openButton').addEventListener('click', openFile);
-            document.getElementById('saveButton').addEventListener('click', saveFile);
-
-            var isModified = false;
-
-            editor.onDidChangeModelContent(function() {
-                isModified = true;
-                var fileName = document.title;
-                if (!fileName.endsWith('*')) {
-                    fileName += "*";
-                }
-                document.title = fileName;
-                updatePreview();
-            });
-
-            function updatePreview() {
-                var preview = document.getElementById('preview');
-                preview.srcdoc = editor.getValue();
-            }
-
-            window.addEventListener('beforeunload', function(e) {
-                if (isModified) {
-                    var confirmationMessage = 'You have unsaved changes. Are you sure you want to leave?';
-                    e.returnValue = confirmationMessage;
-                    return confirmationMessage;
-                }
-            });
-
-            document.getElementById('lineWrapSelect').addEventListener('change', function() {
-                var value = this.value;
-                editor.updateOptions({ wordWrap: value });
-            });
-
-            document.getElementById('minimapSelect').addEventListener('change', function() {
-                var value = this.value;
-                editor.updateOptions({ minimap: { enabled: value === 'on' } });
-            });
-        
-            window.addEventListener('keydown', function(event) {
-                if (event.ctrlKey && event.key === 's') {
-                    event.preventDefault();
-                    saveFile();
-                } else if (event.ctrlKey && event.key === 'o') {
-                    event.preventDefault();
-                    openFile();
-                } else if (event.altKey && event.key === 'm') {
-                    event.preventDefault();
-                    var minimapEnabled = editor.getOption(monaco.editor.EditorOption.minimap).enabled;
-                    editor.updateOptions({ minimap: { enabled: !minimapEnabled } });
-                    document.getElementById('minimapSelect').value = minimapEnabled ? 'off' : 'on';
-                } else if (event.altKey && event.key === 'z') {
-                    event.preventDefault();
-                    var wordWrapEnabled = editor.getOption(monaco.editor.EditorOption.wordWrap) === 'on';
-                    editor.updateOptions({ wordWrap: wordWrapEnabled ? 'off' : 'on' });
-                    document.getElementById('lineWrapSelect').value = wordWrapEnabled ? 'off' : 'on';
-                }
-            });
-
-            var divider = document.getElementById('divider');
-            var editorContainer = document.getElementById('editor-container');
-            var editorElement = document.getElementById('editor');
-            var isResizing = false;
-
-            divider.addEventListener('mousedown', function(e) {
-                isResizing = true;
-                document.body.style.cursor = 'ew-resize';
-            });
-
-            document.addEventListener('mousemove', function(e) {
-                if (isResizing) {
-                    var offsetRight = editorContainer.clientWidth - (e.clientX - editorContainer.offsetLeft);
-                    var editorWidth = editorContainer.clientWidth - offsetRight;
-                    editorWidth = Math.max(editorWidth, 100);
-                    editorElement.style.width = editorWidth + 'px';
-                }
-            });
-
-            document.addEventListener('mouseup', function() {
-                if (isResizing) {
-                    isResizing = false;
-                    document.body.style.cursor = 'default';
-                }
-            });
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/html");
+        editor.setOptions({
+            fontSize: "16px",
+            fontFamily: 'Roadway Mono, TwemojiRubisco, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Open Sans, Helvetica Neue, sans-serif',
+            wrap: false,
+            showPrintMargin: false,
+            enableBasicAutocompletion: true,
+            enableLiveAutocompletion: true,
+            enableSnippets: true
         });
+
+        function openFile() {
+            var input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'text/html';
+            input.onchange = function(event) {
+                var file = event.target.files[0];
+                var reader = new FileReader();
+                reader.onload = function() {
+                    editor.setValue(reader.result);
+                    document.title = file.name;
+                    updatePreview();
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+
+        function saveFile() {
+            var content = editor.getValue();
+            var blob = new Blob([content], { type: 'text/html' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            var currentDate = new Date().toISOString().slice(0, 19).replace(/[-T:/]/g, '');
+            var fileName = 'html_' + currentDate + '.html';
+            a.download = fileName;
+            document.title = fileName;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            isModified = false;
+        }
+
+        document.getElementById('openButton').addEventListener('click', openFile);
+        document.getElementById('saveButton').addEventListener('click', saveFile);
+
+        var isModified = false;
+
+        editor.session.on('change', function() {
+            isModified = true;
+            var fileName = document.title;
+            if (!fileName.endsWith('*')) {
+                fileName += "*";
+            }
+            document.title = fileName;
+            updatePreview();
+        });
+
+        function updatePreview() {
+            var preview = document.getElementById('preview');
+            preview.srcdoc = editor.getValue();
+        }
+
+        window.addEventListener('beforeunload', function(e) {
+            if (isModified) {
+                var confirmationMessage = 'You have unsaved changes. Are you sure you want to leave?';
+                e.returnValue = confirmationMessage;
+                return confirmationMessage;
+            }
+        });
+
+        document.getElementById('lineWrapSelect').addEventListener('change', function() {
+            var value = this.value === 'on';
+            editor.setOption('wrap', value);
+        });
+
+        window.addEventListener('keydown', function(event) {
+            if (event.ctrlKey && event.key === 's') {
+                event.preventDefault();
+                saveFile();
+            } else if (event.ctrlKey && event.key === 'o') {
+                event.preventDefault();
+                openFile();
+            }
+        });
+
+        var divider = document.getElementById('divider');
+        var editorContainer = document.getElementById('editor-container');
+        var editorElement = document.getElementById('editor');
+        var isResizing = false;
+
+        divider.addEventListener('mousedown', function(e) {
+            isResizing = true;
+            document.body.style.cursor = 'ew-resize';
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            if (isResizing) {
+                var offsetRight = editorContainer.clientWidth - (e.clientX - editorContainer.offsetLeft);
+                var editorWidth = editorContainer.clientWidth - offsetRight;
+                editorWidth = Math.max(editorWidth, 100);
+                editorElement.style.width = editorWidth + 'px';
+                editor.resize();
+            }
+        });
+
+        document.addEventListener('mouseup', function() {
+            if (isResizing) {
+                isResizing = false;
+                document.body.style.cursor = 'default';
+            }
+        });
+
         updatePreview();
     </script>
 </body>
