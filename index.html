@@ -5,161 +5,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>WebCode</title>
+    <title>WebScript</title>
 
-    <link rel="icon" type="image/png" href="https://cdn360.pages.dev/products/WebCode/icon.png" sizes="15x15">
-    <link rel="icon" type="image/png" href="https://cdn360.pages.dev/products/WebCode/icon.png" sizes="30x30">
-    <link rel="icon" type="image/png" href="https://cdn360.pages.dev/products/WebCode/icon.png" sizes="600x600">
-    
+    <link rel="icon" type="image/png" href="https://delivercdn.pages.dev/HtmStorm/icon.png" sizes="30x30">
+    <link rel="icon" type="image/png" href="https://delivercdn.pages.dev/HtmStorm/icon.png" sizes="600x600">
+
+    <link rel="stylesheet" href="./style/index.css">
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ext-language_tools.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ext-settings_menu.js"></script>
-    <style>
-        @font-face {
-            font-family: 'Roadway';
-            src: url(https://delivercdn.pages.dev/fonts/roadway/roadway.ttf);
-        }
-
-        @font-face {
-            font-family: 'Roadway Mono';
-            src: url(https://delivercdn.pages.dev/fonts/roadway/roadwaymono.ttf);
-        }
-
-        @font-face {
-            font-family: 'TwemojiRubisco';
-            src: url(https://jstatic.pages.dev/files/products/ide/fonts/TwemojiRubisco.ttf);
-        }
-
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            font-family: 'Roadway', 'TwemojiRubisco', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        }
-
-        #logo {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100px;
-            height: 100px;
-            z-index: 1;
-        }
-
-        #editor-container {
-            flex: 1;
-            display: flex;
-            height: 100%;
-        }
-
-        #editor {
-            width: 50%;
-            font-family: 'Roadway', 'TwemojiRubisco', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            overflow: none;
-        }
-
-        #divider {
-            width: 3px;
-            cursor: ew-resize;
-            background-color: #000;
-        }
-
-        #preview {
-            flex: 1;
-            overflow: auto;
-            background-color: #ffffff;
-            border-left: 1px solid #000;
-        }
-
-        .button-container {
-            display: flex;
-            justify-content: flex-end;
-            padding: 8px;
-            background-color: #000000;
-        }
-
-        button {
-            font-family: 'Roadway', 'TwemojiRubisco', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            margin-right: 8px;
-            padding: 6px 12px;
-            font-size: 14px;
-            cursor: pointer;
-            background-color: #212121;
-            color: #ffffff;
-            border: none;
-            border-radius: 4px;
-        }
-
-        button:hover {
-            background-color: #3474f0;
-            color: #ffffff;
-        }
-
-        select {
-            font-family: 'Roadway', 'TwemojiRubisco', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            font-size: 14px;
-            background-color: #212121;
-            color: #ffffff;
-            border: none;
-            margin-right: 8px;
-            padding: 6px 12px;
-            border-radius: 4px;
-        }
-
-        #logo {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: auto;
-            height: 30px;
-            z-index: 1;
-            margin-left: 10px;
-            padding-top: 8px;
-        }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        
-        ::-webkit-scrollbar {
-            background: #272822;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #272822;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background-color: #8f908a;
-            border-radius: 10px;
-            border: 3px solid #272822;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background-color: #f8f8f0;
-        }
-
-        ::-webkit-scrollbar-thumb:active {
-            background-color: #f8f8f0;
-        }
-    </style>
 </head>
 
 <body>
-    <img id="logo" src="https://cdn360.pages.dev/products/WebCode/wordmark.png" alt="Logo">
+    <img id="logo" src="./style/images/WebScript-Logo-White.png" alt="Logo">
 
     <div class="button-container">
-        <button id="openButton">📂 Open</button>
-        <button id="saveButton">💾 Save</button>
         <select id="lineWrapSelect">
             <option value="off">Line Wrap: Off</option>
             <option value="on">Line Wrap: On</option>
         </select>
+        <button id="openButton">📂 Open</button>
+        <button id="saveButton">💾 Save</button>
+        <button id="saveDump">Dump</button>
     </div>
 
     <div id="editor-container">
@@ -168,125 +36,6 @@
         <iframe id="preview"></iframe>
     </div>
 
-    <script>
-        var editor = ace.edit("editor");
-        editor.setTheme("ace/theme/monokai");
-        editor.session.setMode("ace/mode/html");
-        editor.setOptions({
-            fontSize: "16px",
-            fontFamily: 'Roadway Mono, TwemojiRubisco, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Open Sans, Helvetica Neue, sans-serif',
-            wrap: false,
-            showPrintMargin: false,
-            enableBasicAutocompletion: true,
-            enableLiveAutocompletion: true,
-            enableSnippets: true
-        });
-
-        function openFile() {
-            var input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'text/html';
-            input.onchange = function(event) {
-                var file = event.target.files[0];
-                var reader = new FileReader();
-                reader.onload = function() {
-                    editor.setValue(reader.result);
-                    document.title = file.name;
-                    updatePreview();
-                };
-                reader.readAsText(file);
-            };
-            input.click();
-        }
-
-        function saveFile() {
-            var content = editor.getValue();
-            var blob = new Blob([content], { type: 'text/html' });
-            var url = URL.createObjectURL(blob);
-            var a = document.createElement('a');
-            a.href = url;
-            var currentDate = new Date().toISOString().slice(0, 19).replace(/[-T:/]/g, '');
-            var fileName = 'html_' + currentDate + '.html';
-            a.download = fileName;
-            document.title = fileName;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-            isModified = false;
-        }
-
-        document.getElementById('openButton').addEventListener('click', openFile);
-        document.getElementById('saveButton').addEventListener('click', saveFile);
-
-        var isModified = false;
-
-        editor.session.on('change', function() {
-            isModified = true;
-            var fileName = document.title;
-            if (!fileName.endsWith('*')) {
-                fileName += "*";
-            }
-            document.title = fileName;
-            updatePreview();
-        });
-
-        function updatePreview() {
-            var preview = document.getElementById('preview');
-            preview.srcdoc = editor.getValue();
-        }
-
-        window.addEventListener('beforeunload', function(e) {
-            if (isModified) {
-                var confirmationMessage = 'You have unsaved changes. Are you sure you want to leave?';
-                e.returnValue = confirmationMessage;
-                return confirmationMessage;
-            }
-        });
-
-        document.getElementById('lineWrapSelect').addEventListener('change', function() {
-            var value = this.value === 'on';
-            editor.setOption('wrap', value);
-        });
-
-        window.addEventListener('keydown', function(event) {
-            if (event.ctrlKey && event.key === 's') {
-                event.preventDefault();
-                saveFile();
-            } else if (event.ctrlKey && event.key === 'o') {
-                event.preventDefault();
-                openFile();
-            }
-        });
-
-        var divider = document.getElementById('divider');
-        var editorContainer = document.getElementById('editor-container');
-        var editorElement = document.getElementById('editor');
-        var isResizing = false;
-
-        divider.addEventListener('mousedown', function(e) {
-            isResizing = true;
-            document.body.style.cursor = 'ew-resize';
-        });
-
-        document.addEventListener('mousemove', function(e) {
-            if (isResizing) {
-                var offsetRight = editorContainer.clientWidth - (e.clientX - editorContainer.offsetLeft);
-                var editorWidth = editorContainer.clientWidth - offsetRight;
-                editorWidth = Math.max(editorWidth, 100);
-                editorElement.style.width = editorWidth + 'px';
-                editor.resize();
-            }
-        });
-
-        document.addEventListener('mouseup', function() {
-            if (isResizing) {
-                isResizing = false;
-                document.body.style.cursor = 'default';
-            }
-        });
-
-        updatePreview();
-    </script>
+    <script src="./script/index.js"></script>
 </body>
 </html>
