@@ -11,6 +11,35 @@ editor.setOptions({
     enableSnippets: true
 });
 
+var boilerplateHTML = `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Example HTML</title>
+</head>
+<style>
+    h1 {
+        font-family: system-ui;
+        font-size: 40px;
+        font-weight: 600;
+    }
+    
+    p {
+        font-family: serif;
+        font-size: 18px;
+        font-weight: 400;
+    }
+</style>
+<body>
+    <h1>Hello, World!</h1>
+    <p>This is a boilerplate HTML example.</p>
+</body>
+</html>
+`;
+
+editor.setValue(boilerplateHTML);
+updatePreview();
+
 function openFile() {
     var input = document.createElement('input');
     input.type = 'file';
@@ -132,5 +161,3 @@ document.addEventListener('mouseup', function() {
         document.body.style.cursor = 'default';
     }
 });
-
-updatePreview();
