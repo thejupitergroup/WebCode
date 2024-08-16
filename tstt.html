@@ -8,11 +8,14 @@
     <link rel="icon" type="image/png" href="https://delivercdn.pages.dev/HtmStorm/icon.png" sizes="30x30">
     <link rel="icon" type="image/png" href="https://delivercdn.pages.dev/HtmStorm/icon.png" sizes="600x600">
     <link rel="stylesheet" href="./style/index.css">
-    <script src="/script/code-editor/lib/ace/ace.js"></script>
-    <script src="/script/code-editor/lib/ace/ext-language_tools.js"></script>
-    <script src="/script/code-editor/lib/ace/ext-settings_menu.js"></script>
-    <script src="/script/code-editor/lib/ace/theme/tomorrow_night.js"></script>
-    <script src="/script/code-editor/lib/ace/mode/html.js"></script>
+    
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ext-language_tools.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ext-settings_menu.js"></script> -->
+
+    <script src="./script/code-editor/lib/ace/ace.js"></script>
+    <script src="./script/code-editor/lib/ace/ext/language_tools.js"></script>
+    <script src="./script/code-editor/lib/ace/ext/settings_menu.js"></script>
 </head>
 <style>
     @font-face {
@@ -190,12 +193,8 @@
     </div>
     <script>
         var editor = ace.edit("editor");
-        // Here we set the paths to the theme and mode manually based on the directory structure
-        ace.config.set("basePath", "/script/code-editor/lib/ace");
-
-        editor.setTheme("/script/code-editor/lib/ace/theme/tomorrow_night");
-        editor.session.setMode("/script/code-editor/lib/ace/mode/html");
-
+        editor.setTheme("ace/theme/tomorrow_night.css");
+        editor.session.setMode("ace/mode/html/saxparser.js");
         editor.setOptions({
             fontSize: "16px",
             fontFamily: 'Laurentia Code',
