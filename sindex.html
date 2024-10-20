@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebCode</title>
+    <link rel="icon" type="image/png" href="https://delivercdn.pages.dev/HtmStorm/icon.png" sizes="30x30">
+    <link rel="icon" type="image/png" href="https://delivercdn.pages.dev/HtmStorm/icon.png" sizes="600x600">
+    <link rel="stylesheet" href="./style/index.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ext-language_tools.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ext-settings_menu.js"></script>
+</head>
+<body>
+    <img id="logo" src="./style/images/logo.png" alt="Logo">
+    <div class="button-container">
+        <select id="lineWrapSelect">
+            <option value="off">Line Wrap: Off</option>
+            <option value="on">Line Wrap: On</option>
+        </select>
+        <button id="openButton">📂 Open</button>
+        <button id="saveButton">💾 Save</button>
+        <button id="saveDump">Dump</button>
+    </div>
+    <div id="editor-container">
+        <div id="editor"></div>
+        <div id="divider"></div>
+        <iframe id="preview"></iframe>
+    </div>
+    <script src="./script/index.js"></script>
+</body>
+</html>

@@ -5,29 +5,353 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebCode</title>
-    <link rel="icon" type="image/png" href="https://delivercdn.pages.dev/HtmStorm/icon.png" sizes="30x30">
-    <link rel="icon" type="image/png" href="https://delivercdn.pages.dev/HtmStorm/icon.png" sizes="600x600">
-    <link rel="stylesheet" href="./style/index.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ext-language_tools.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ext-settings_menu.js"></script>
+    <link rel="icon" type="image/png" href="https://cdn360.pages.dev/products/WebCode/icon.png" sizes="30x30">
+    <link rel="icon" type="image/png" href="https://cdn360.pages.dev/products/WebCode/icon.png" sizes="600x600">
+    <script src="https://andorraeditor.pages.dev/andorra/dev/vs/loader.js"></script>
 </head>
+<style>
+    @font-face {
+        font-family: 'andorraSans';
+        src: url(https://webcode.pages.dev/DeltaMono.ttf);
+    }
+
+    @font-face {
+        font-family: 'andorraMono';
+        src: url(https://webcode.pages.dev/DeltaMono.ttf);
+    }
+
+    @font-face {
+        font-family: 'SeavoltUIEmoji';
+        src: url(https://delivercdn.pages.dev/jupiter/SeavoltUI/emoji/SeavoltUIEmoji.ttf);
+    }
+
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #logo {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100px;
+        height: 100px;
+        z-index: 1;
+    }
+
+    #editor-container {
+        flex: 1;
+        display: flex;
+        height: 100%;
+    }
+
+    #editor {
+        width: 50%;
+        overflow: none;
+    }
+
+    #divider {
+        width: 3px;
+        cursor: ew-resize;
+        background-color: #000;
+    }
+
+    #preview {
+        flex: 1;
+        overflow: auto;
+        background-color: #ffffff;
+        border-left: 1px solid #000;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: flex-end;
+        padding: 8px;
+        background-color: #000000;
+    }
+
+    button {
+        font-family: 'andorraSans', 'TwemojiRubisco', Arial, Helvetica, sans-serif;
+        margin-right: 8px;
+        padding: 6px 12px;
+        font-size: 14px;
+        cursor: pointer;
+        background-color: #212121;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+    }
+
+    button:hover {
+        background-color: #3474f0;
+        color: #ffffff;
+    }
+
+    .monaco-editor, .suggest-widget, .monaco-list, .monaco-list-row, .monaco-highlighted-label {
+        color: #ffffff !important;
+    }
+
+    select {
+        font-family: 'andorraSans', 'TwemojiRubisco', Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        background-color: #212121;
+        color: #ffffff;
+        border: none;
+        margin-right: 8px;
+        padding: 6px 12px;
+        border-radius: 4px;
+    }
+
+    #logo {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: auto;
+        height: 30px;
+        z-index: 1;
+        margin-left: 10px;
+        padding-top: 8px;
+    }
+
+    iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    #console {
+        background-color: #1e1e1e;
+        color: #dcdcdc;
+        font-family: 'andorraMono';
+        height: 150px;
+        overflow-y: auto;
+        border-top: 1px solid #000;
+        padding: 10px;
+    }
+
+    #console p {
+        margin: 0;
+    }
+</style>
+
 <body>
-    <img id="logo" src="./style/images/logo.png" alt="Logo">
+    <img id="logo" src="https://cdn360.pages.dev/products/WebCode/wordmark.png" alt="Logo">
+
     <div class="button-container">
-        <select id="lineWrapSelect">
-            <option value="off">Line Wrap: Off</option>
-            <option value="on">Line Wrap: On</option>
-        </select>
         <button id="openButton">📂 Open</button>
         <button id="saveButton">💾 Save</button>
         <button id="saveDump">Dump</button>
+        <select id="lineWrapSelect">
+            <option value="off">Line Wrap: Disabled</option>
+            <option selected value="on">Line Wrap: Enabled</option>
+        </select>
+        <select id="minimapSelect">
+            <option value="on">Mini Map: Enabled</option>
+            <option value="off">Mini Map: Disabled</option>
+        </select>
     </div>
+
     <div id="editor-container">
         <div id="editor"></div>
         <div id="divider"></div>
         <iframe id="preview"></iframe>
     </div>
-    <script src="./script/index.js"></script>
+
+    <div id="console"></div>
+
+    <script>
+        require.config({
+            paths: {
+                'vs': 'https://andorraeditor.pages.dev/andorra/min/vs'
+            }
+        });
+        require(['vs/editor/editor.main'], function () {
+            monaco.editor.defineTheme('WebScript', {
+                base: 'vs-dark',
+                inherit: true,
+                rules: [
+                    { token: 'identifier', foreground: '9cdcfe'},
+                    { token: 'operators', foreground: '000000' },
+                    { token: 'keyword', foreground: '569dda' },
+                    { token: 'string', foreground: 'd69d85' },
+                    { token: 'string.escape', foreground: 'd69d85' },
+                    { token: 'comment', foreground: '58a74a' },
+                    { token: 'comment.doc', foreground: '58a74a' },
+                    { token: 'constant', foreground: '000000' },
+                    { token: 'delimiter.curly', foreground: 'd8a0e1' },
+                    { token: 'delimiter.square', foreground: 'd8a0e1' },
+                    { token: 'delimiter.parenthesis', foreground: 'd8a0e1' },
+                    { token: 'delimiter.angle', foreground: 'd8a0e1' },
+                    { token: 'delimiter.array', foreground: 'd8a0e1' },
+                    { token: 'delimiter.bracket', foreground: 'd8a0e1' },
+                    { token: 'number.hex', foreground: 'dfddaa' },
+                    { token: 'number.octal', foreground: 'dfddaa' },
+                    { token: 'number.binary', foreground: 'dfddaa' },
+                    { token: 'number.float', foreground: 'dfddaa' },
+                    { token: 'variable.name', foreground: '4ecab0' },
+                    { token: 'variable.value', foreground: '9cdcfe' },
+                    { token: 'entity', foreground: '000000' },
+                    { token: 'tag', foreground: '579dd7' },
+                    { token: 'info-token', foreground: '9ce582' },
+                    { token: 'warn-token', foreground: 'fff2aa' },
+                    { token: 'error-token', foreground: 'ff3f37' },
+                    { token: 'debug-token', foreground: '000000' },
+                    { token: 'regexp', foreground: 'dfddaa' },
+                    { token: 'attribute', foreground: '000000' },
+                    { token: 'constructor', foreground: '000000' },
+                    { token: 'namespace', foreground: '000000' },
+                    { token: 'type', foreground: '4ecab0' },
+                    { token: 'predefined', foreground: '000000' },
+                    { token: 'invalid', foreground: '000000' },
+                ],
+                colors: {
+                    'editor.foreground': '#dcdcdc',
+                    'editor.background': '#1e1e1e',
+                    'editorCursor.foreground': '#e7e7e7',
+                    'editor.lineHighlightBackground': '#2e2e2e',
+                    'editorLineNumber.foreground': '#8a8a8a',
+                    'editor.selectionBackground': '#264f78',
+                    'minimap.background': '#1e1e1e',
+                    'minimap.foreground': '#121212'
+                }
+            });
+            
+            var editor = monaco.editor.create(document.getElementById('editor'), {
+                value: ['<html>', '<head></head>', '<body>', '', '</body>', '</html>'].join('\n'),
+                language: 'html',
+                theme: 'WebScript',
+                fontSize: 13,
+                fontFamily: 'andorraMono, Gloobmoji, SeavoltUIEmoji, monospace',
+                minimap: { enabled: true },
+                wordWrap: 'on',
+            });
+
+            const font = new FontFace('andorraMono', 'url(https://webcode.pages.dev/DeltaMono.ttf)');
+
+            font.load().then(() => {
+                document.fonts.add(font);
+                monaco.editor.remeasureFonts();
+            }).catch((error) => {
+                console.error('Error loading custom font:', error);
+            });
+
+            editor.onDidChangeModelContent(() => {
+                const html = editor.getValue();
+                const preview = document.getElementById('preview');
+                preview.srcdoc = html;
+
+                preview.contentWindow.postMessage({
+                    type: 'injectConsole',
+                }, '*');
+            });
+
+            function openFile() {
+                var input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'text/html';
+                input.onchange = function(event) {
+                    var file = event.target.files[0];
+                    var reader = new FileReader();
+                    reader.onload = function() {
+                        editor.setValue(reader.result);
+                        document.title = file.name;
+                        updatePreview();
+                    };
+                    reader.readAsText(file);
+                };
+                input.click();
+            }
+
+            function saveFile() {
+                var content = editor.getValue();
+                var blob = new Blob([content], { type: 'text/html' });
+                var url = URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                var currentDate = new Date().toISOString().slice(0, 19).replace(/[-T:/]/g, '');
+                var fileName = 'html_' + currentDate + '.html';
+                a.download = fileName;
+                document.title = fileName;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+                isModified = false;
+            }
+
+            function saveDump() {
+                var content = editor.getValue();
+                var blob = new Blob([content], { type: 'text/' });
+                var url = URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                var currentDate = new Date().toISOString().slice(0, 19).replace(/[-T:/]/g, '');
+                var fileName = 'savedump_' + currentDate + '.dt';
+                a.download = fileName;
+                document.title = fileName;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+                isModified = false;
+            }
+
+            document.getElementById('openButton').addEventListener('click', openFile);
+            document.getElementById('saveButton').addEventListener('click', saveFile);
+
+            const consoleElement = document.getElementById('console');
+            function logMessage(message, type = 'log') {
+                const logElement = document.createElement('p');
+                logElement.textContent = `[${type.toUpperCase()}] ${message}`;
+                consoleElement.appendChild(logElement);
+                consoleElement.scrollTop = consoleElement.scrollHeight;
+            }
+
+            window.addEventListener('message', function(event) {
+                if (event.data.type === 'consoleLog') {
+                    logMessage(event.data.message, event.data.level);
+                }
+            });
+
+            const injectConsoleScript = `
+                (function() {
+                    function sendConsoleMessage(level, message) {
+                        window.parent.postMessage({
+                            type: 'consoleLog',
+                            level: level,
+                            message: message
+                        }, '*');
+                    }
+
+                    // Override console.log, console.warn, and console.error
+                    console.log = function(message) {
+                        sendConsoleMessage('log', message);
+                    };
+
+                    console.warn = function(message) {
+                        sendConsoleMessage('warn', message);
+                    };
+
+                    console.error = function(message) {
+                        sendConsoleMessage('error', message);
+                    };
+
+                    // Capture global errors
+                    window.onerror = function(message, source, lineno, colno, error) {
+                        sendConsoleMessage('error', \`\${message} at \${source}:\${lineno}:\${colno}\`);
+                    };
+                })();
+            `;
+
+            document.getElementById('preview').addEventListener('load', function() {
+                const iframeWindow = this.contentWindow;
+                iframeWindow.eval(injectConsoleScript);
+            });
+        });
+    </script>
 </body>
 </html>
